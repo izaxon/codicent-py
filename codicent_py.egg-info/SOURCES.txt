@@ -1,0 +1,9 @@
+README.md
+setup.py
+codicent_py.egg-info/PKG-INFO
+codicent_py.egg-info/SOURCES.txt
+codicent_py.egg-info/dependency_links.txt
+codicent_py.egg-info/requires.txt
+codicent_py.egg-info/top_level.txt
+src/codicentpy.py
+src/test_codicent.py
