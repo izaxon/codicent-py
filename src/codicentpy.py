@@ -1,38 +1,52 @@
 import requests
 
 class Codicent:
-    def __init__(self, token, signalr_host=None):
+    def __init__(self, token, signalr_host=None, base_url=None, verify_https=True):
         self.token = token
         self.signalr_host = signalr_host
-        self.base_url = "https://codicent.com/app"
+        self.base_url = base_url if base_url is not None else "https://codicent.com/"
+        self.verify_https = verify_https
 
     def init(self):
         # No-op, initialization is done in the constructor
         pass
 
     def upload(self, file):
-        url = f"{self.base_url}/upload"
+        url = f"{self.base_url}app/upload"
         files = {"file": file}
         headers = {"Authorization": f"Bearer {self.token}"}
-        response = requests.post(url, files=files, headers=headers)
+        response = requests.post(url, files=files, headers=headers, verify=self.verify_https)
         return response.json()["id"]
 
     def post_message(self, message, parent_id=None, type="info"):
-        url = f"{self.base_url}/AddChatMessage"
+        url = f"{self.base_url}app/AddChatMessage"
         data = {"content": message, "type": type, "isNew": False }
         if parent_id:
             data["parentId"] = parent_id
         headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(url, json=data, headers=headers, verify=self.verify_https)
         return response.json()["id"]
 
-    def get_messages(self, start=0, length=10, search="", after_timestamp=None, before_timestamp=None):
-        url = f"{self.base_url}/GetChatMessages"
+    def _get_messages_deprecated(self, start=0, length=10, search="", after_timestamp=None, before_timestamp=None):
+        url = f"{self.base_url}app/GetChatMessages"
         params = {"start": start, "length": length, "search": search}
         if after_timestamp:
             params["afterTimestamp"] = after_timestamp.isoformat()
         if before_timestamp:
             params["beforeTimestamp"] = before_timestamp.isoformat()
         headers = {"Authorization": f"Bearer {self.token}"}
-        response = requests.get(url, params=params, headers=headers)
+        response = requests.get(url, params=params, headers=headers, verify=self.verify_https)
+        return response.json()
+    
+    def get_messages(self, start=0, length=10, tags=[], search="", after_timestamp=None, before_timestamp=None, no_tags=None):
+        url = f"{self.base_url}api/GetMessages"
+        params = {"start": start, "length": length, "search": search, "tags": tags}
+        if after_timestamp:
+            params["afterTimestamp"] = after_timestamp.isoformat()
+        if before_timestamp:
+            params["beforeTimestamp"] = before_timestamp.isoformat()
+        if no_tags:
+            params["noTags"] = no_tags
+        headers = {"Authorization": f"Bearer {self.token}"}
+        response = requests.post(url, json=params, headers=headers, verify=self.verify_https)
         return response.json()
