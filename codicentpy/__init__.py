@@ -1,1 +1,1 @@
-from .codicentpy import Codicent
+from .core import Codicent
