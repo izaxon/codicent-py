@@ -1,4 +1,5 @@
 import requests
+from urllib.parse import quote
 
 class Codicent:
     def __init__(self, token, signalr_host=None, base_url=None, verify_https=True):
@@ -50,3 +51,9 @@ class Codicent:
         headers = {"Authorization": f"Bearer {self.token}"}
         response = requests.post(url, json=params, headers=headers, verify=self.verify_https)
         return response.json()
+    
+    def get_chat_reply(self, message):
+        url = f"{self.base_url}api/GetChatReply2?message={quote(message)}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        response = requests.get(url, headers=headers, verify=self.verify_https)
+        return response.text
