@@ -24,27 +24,37 @@ Create a `Codicent` object with your API token and optional SignalR host:
 ```python
 codicent = Codicent("YOUR_API_TOKEN")
 ```
-### Uploading a File
+### Uploading a file
 
 Upload a file to Codicent:
 ```python
 file_id = codicent.upload(open("example.txt", "rb"))
 print(file_id)
 ```
-### Posting a Message
+### Posting a message
 
 Post a message to Codicent:
 ```python
 message_id = codicent.post_message("Hello, world!", type="info")
 print(message_id)
 ```
-### Getting Messages
+### Getting messages
 
 Get a list of messages from Codicent:
 ```python
 messages = codicent.get_messages(start=0, length=10)
 print(messages)
 ```
+
+### Get AI chat reply
+
+Sends a message to the Codicent chat (AI) and waits for the reply:
+```python
+reply = codicent.get_chat_reply("What can you help me with?")
+print(reply)
+```
+
+
 Methods
 -------
 
