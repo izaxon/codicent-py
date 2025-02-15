@@ -1,3 +1,5 @@
+import base64
+import json
 import requests
 from urllib.parse import quote
 
@@ -56,4 +58,26 @@ class Codicent:
         url = f"{self.base_url}api/GetChatReply2?message={quote(message)}"
         headers = {"Authorization": f"Bearer {self.token}"}
         response = requests.get(url, headers=headers, verify=self.verify_https)
-        return response.text
+        return response.text, 
+
+    def post_chat_reply(self, message):
+        url = f"{self.base_url}app/GetAi2ChatReply"
+
+        # extract project property from jwt token in this.token
+        payload = self.token.split(".")[1]
+        # Add padding if necessary
+        payload += '=' * (-len(payload) % 4)
+        decoded_payload = base64.urlsafe_b64decode(payload).decode('utf-8')
+        jwt_token = json.loads(decoded_payload)
+        codicent = jwt_token["project"]
+
+        data = {"message": message, "project": codicent}
+        headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
+        response = requests.post(url, json=data, headers=headers, verify=self.verify_https)
+        message = response.json()
+        return {"id": message["id"], "content": message["content"]}
+    
+# Test...
+# import os
+# c = Codicent(os.getenv("CODICENT_TOKEN"))
+# print(c.post_chat_reply("Hello"))

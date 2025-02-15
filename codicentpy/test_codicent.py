@@ -1,10 +1,13 @@
 import unittest
 from unittest.mock import patch
 from codicentpy import Codicent
+import os
 
 class TestCodicent(unittest.TestCase):
     def setUp(self):
-        self.token = "test_token"
+        self.token = os.getenv("CODICENT_TOKEN")
+        if not self.token:
+            raise ValueError("CODICENT_TOKEN environment variable not set")
         self.codicent = Codicent(self.token)
 
     @patch('codicentpy.requests.post')
@@ -32,6 +35,17 @@ class TestCodicent(unittest.TestCase):
         messages = self.codicent.get_messages()
         self.assertEqual(messages, {"messages": []})
         mock_get.assert_called_once()
+
+    @patch('codicentpy.requests.post')
+    def test_post_chat_reply(self, mock_post):
+        mock_response = mock_post.return_value
+        mock_response.text = "Test reply"
+        message = "Svara med exakta texten HEJ"
+        reply = self.codicent.post_chat_reply(message)
+        print("REPLY====", reply, "====REPLY")
+        self.assertIsNotNone(reply["id"])
+        self.assertEqual(reply["content"], "HEJ")
+        mock_post.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

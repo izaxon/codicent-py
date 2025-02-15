@@ -91,3 +91,29 @@ Get a list of messages from Codicent.
 * `before_timestamp`: A timestamp to retrieve messages before (optional).
 
 Returns a list of message objects.
+
+### `get_chat_reply`
+
+Sends a message to the Codicent chat (AI) and waits for the reply.
+
+* `message`: The message to send.
+
+### `post_chat_reply`
+
+Posts a message to the Codicent AI chat and returns the reply.
+
+* `message`: The message to send.
+
+Returns a dictionary with:
+  - id: The message ID.
+  - content: The reply message content.
+
+### Running Tests
+To run tests, first install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+Then execute:
+```bash
+pytest
+```
