@@ -80,9 +80,9 @@ class Codicent:
         return {"id": message["id"], "content": message["content"].replace("@" + codicent, "").strip()}
     
 # Test...
-import os
-c = Codicent(os.getenv("CODICENT_TOKEN"))
-reply = c.post_chat_reply("Hello, my name is Johan")
-print(reply["content"])
-reply = c.post_chat_reply("What is my name?", reply["id"])
-print(reply["content"])
+# import os
+# c = Codicent(os.getenv("CODICENT_TOKEN"))
+# reply = c.post_chat_reply("Hello, my name is Johan")
+# print(reply["content"])
+# reply = c.post_chat_reply("What is my name?", reply["id"])
+# print(reply["content"])
