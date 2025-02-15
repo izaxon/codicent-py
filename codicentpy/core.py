@@ -71,13 +71,18 @@ class Codicent:
         jwt_token = json.loads(decoded_payload)
         codicent = jwt_token["project"]
 
-        data = {"message": message, "project": codicent, "messageId": conversation_id}
+        data = {"message": message, "project": codicent}
+        if conversation_id:
+            data["messageId"] = conversation_id
         headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
         response = requests.post(url, json=data, headers=headers, verify=self.verify_https)
         message = response.json()
-        return {"id": message["id"], "content": message["content"]}
+        return {"id": message["id"], "content": message["content"].replace("@" + codicent, "").strip()}
     
 # Test...
-# import os
-# c = Codicent(os.getenv("CODICENT_TOKEN"))
-# print(c.post_chat_reply("Hello"))
+import os
+c = Codicent(os.getenv("CODICENT_TOKEN"))
+reply = c.post_chat_reply("Hello, my name is Johan")
+print(reply["content"])
+reply = c.post_chat_reply("What is my name?", reply["id"])
+print(reply["content"])
