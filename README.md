@@ -117,3 +117,9 @@ Then execute:
 ```bash
 pytest
 ```
+
+### Building
+To build the package, run:
+```bash
+python setup.py sdist bdist_wheel
+```

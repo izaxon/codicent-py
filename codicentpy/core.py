@@ -60,7 +60,7 @@ class Codicent:
         response = requests.get(url, headers=headers, verify=self.verify_https)
         return response.text, 
 
-    def post_chat_reply(self, message):
+    def post_chat_reply(self, message, conversation_id=None):
         url = f"{self.base_url}app/GetAi2ChatReply"
 
         # extract project property from jwt token in this.token
@@ -71,7 +71,7 @@ class Codicent:
         jwt_token = json.loads(decoded_payload)
         codicent = jwt_token["project"]
 
-        data = {"message": message, "project": codicent}
+        data = {"message": message, "project": codicent, "messageId": conversation_id}
         headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
         response = requests.post(url, json=data, headers=headers, verify=self.verify_https)
         message = response.json()
