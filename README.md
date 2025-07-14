@@ -7,6 +7,11 @@ This library provides a Python interface to the Codicent API.
 ------------
 To install using pip, run:
 ```bash
+pip install codicent-py
+```
+
+For development installation from source:
+```bash
 pip install git+https://github.com/izaxon/codicent-py.git
 ```
 
